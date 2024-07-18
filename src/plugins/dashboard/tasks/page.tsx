@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { authStore } from "@/stores/auth";
+import { useRecoilValue } from "recoil";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { createTask, getListTask } from "./api";
+import { listTaskState } from "./taskstore";
+import { toast } from "react-toastify";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export enum TASK_STATUS {
@@ -11,7 +18,53 @@ export enum TASK_STATUS {
   "DELETED" = "Deleted",
 }
 
+interface Task {
+  id: number;
+  title: string;
+  content: string;
+  status: TASK_STATUS;
+}
+
 export default function TaskPage() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const listTask = useRecoilValue(listTaskState);
+  const profileUser = useRecoilValue(authStore);
+
+  // const createTask = async () => {
+  //   const taskData = {
+  //     title: title,
+  //     content: description,
+  //   };
+
+  //   try {
+  //     const response = await axios.post(
+  //       `http://localhost:8080/todos/user/${profileUser?.id}`,
+  //       taskData
+  //     );
+  //     console.log("Task created:", response.data);
+  //   } catch (error) {
+  //     console.error("Error creating task:", error);
+  //   }
+  // };
+
+  useEffect(() => {
+    getListTask();
+  }, []);
+
+
+  const hanldleCreateTask = async () => {
+    const taskData = {
+      title: title,
+      content: description,
+    }
+
+    createTask(taskData);
+  };
+
+
+
+  console.log(profileUser);
   return (
     <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
       <div className="mb-5 w-full">
@@ -19,13 +72,25 @@ export default function TaskPage() {
           <div className="flex flex-col gap-3">
             <div className="flex justify-start flex-col items-start gap-2">
               <Label htmlFor="title">Title</Label>
-              <Input type="title" id="title" placeholder="title" />
+              <Input
+                id="title"
+                placeholder="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </div>
             <div className="flex justify-start flex-col items-start gap-2">
               <Label htmlFor="desc">Desc</Label>
-              <Textarea id="desc" placeholder="desc" />
+              <Textarea
+                id="desc"
+                placeholder="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </div>
-            <Button className="mt-5">Create Task</Button>
+            <Button className="mt-5" onClick={hanldleCreateTask}>
+              Create Task
+            </Button>
           </div>
           <div>
             <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
@@ -48,7 +113,8 @@ export default function TaskPage() {
               <div className="relative z-20 mt-auto">
                 <blockquote className="space-y-2">
                   <p className="text-lg">
-                    “HELP YOU FOCUS AND TRACK YOUR PROGRESS BETTER WHITH YOUR OWN SCHEDULE.”
+                    “HELP YOU FOCUS AND TRACK YOUR PROGRESS BETTER WITH YOUR OWN
+                    SCHEDULE.”
                   </p>
                   <footer className="text-sm">Sofia Davis</footer>
                 </blockquote>
@@ -57,14 +123,16 @@ export default function TaskPage() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <CardTask
-          key={1}
-          id={1}
-          title="Task name"
-          desc="desc here"
-          status={TASK_STATUS.IN_PROGRESS}
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:grid-cols-4">
+        {listTask.map((task) => (
+          <CardTask
+            key={task.id}
+            id={task.id}
+            title={task.title}
+            content={task.content}
+            status={task.status}
+          />
+        ))}
       </div>
     </div>
   );

@@ -11,8 +11,17 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 export function UserNav() {
+  const router = useNavigate();
+  
+  const logOutHandler = () => {
+    router("/auth/login");
+  }
+
+
+  
   return (
     <div className="flex gap-6 items-center">
       <ModeToggle />
@@ -51,7 +60,7 @@ export function UserNav() {
             <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={logOutHandler}>
             Log out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
@@ -60,3 +69,5 @@ export function UserNav() {
     </div>
   );
 }
+
+

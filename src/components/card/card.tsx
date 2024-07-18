@@ -18,15 +18,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { deleteTask } from "@/plugins/dashboard/tasks/api";
 
 interface ITask {
   id: number;
   title: string;
-  desc: string;
+  content: string;
   status: TASK_STATUS;
 }
 
+
 const CardTask = (props: ITask) => {
+
+  const handleDeleteTask = () => {
+    deleteTask(props.id);
+  }
+
   return (
     <>
       <Card>
@@ -43,20 +50,31 @@ const CardTask = (props: ITask) => {
               <DropdownMenuSeparator />
               <DropdownMenuItem>Update Task</DropdownMenuItem>
               <DropdownMenuItem>Move to trash</DropdownMenuItem>
-              <DropdownMenuItem>Delete Task</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDeleteTask}>Delete Task</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </CardHeader>
-        <CardContent className="flex flex-col justify-start items-start">
-          <div className="text-2xl font-bold line-clamp-3">{props.desc}</div>
-          <Badge variant="default" className="self-end mt-5">
-            {props.status}
-          </Badge>
+        <CardContent className="flex flex-col justify-start items-start gap-3">
+          <div className="text-md font-bold line-clamp-3">{props.content}</div>
+          <div className="flex flex-col items-start w-full">
+            <div>
+              456
+            </div>
+            <div className="flex items-end justify-between w-full">
+              <Badge variant="default" className="self-end mt-5">
+                {props.status}
+              </Badge>
+              <div>
+                edit
+              </div>
+            </div>
+
+          </div>
         </CardContent>
       </Card>
 
       <Dialog>
-        <DialogTrigger>Open</DialogTrigger>
+        {/* <DialogTrigger>Open</DialogTrigger> */}
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Are you absolutely sure?</DialogTitle>

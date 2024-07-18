@@ -9,6 +9,11 @@ import MainLayout from "./layouts/main-layout.tsx";
 import LoginPage from "./plugins/auth/login.tsx";
 import DashboardPage from "./plugins/dashboard/dashboard/page.tsx";
 import TaskPage from "./plugins/dashboard/tasks/page.tsx";
+import { RecoilRoot } from "recoil";
+import RecoilNexus from "recoil-nexus";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +42,7 @@ const router = createBrowserRouter([
       },
       {
         path: "trash-task",
-        element: <div>TASK DELETE HERRE</div>,
+        element: <div>TASK DELETE HERE</div>,
       },
     ],
   },
@@ -45,8 +50,12 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <RecoilRoot>
+      <RecoilNexus />
+      <ToastContainer />
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );

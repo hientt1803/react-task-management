@@ -1,12 +1,56 @@
 import { Button } from "@/components/ui/button";
+import { authStore } from "@/stores/auth";
+import { API_URL } from "@/utils";
+import axios from "axios";
+import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  const handleSubmitForm = () => {
-    navigate("/dashboard");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const [user, setUser] = useRecoilState(authStore);
+
+  const handleOnChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  }
+
+  const handleOnChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  }
+
+  // const fetchData = async () => {
+
+  // };
+
+  // localStorage.setItem("token", ")
+  // localStorage.getItem("token");
+  // sessionStorage.getItem("token");
+
+  const handleSubmitForm = async () => {
+    await axios
+    .post(`${API_URL}users/login`, { email, password })
+    .then((res) => {
+      const response = res.data;
+      setUser(response);
+      console.log(response);
+      console.log(res.status);
+      if (res.status === 200) {
+        navigate("/dashboard");
+      }
+    }).catch((error) => {
+      console.log(error);
+      
+    });
   };
+
+  // const { data, error } = useSWR<IPosts[]>(`${API_URL}/posts`, fetcher);
+
+  // if (error) return <div>Lỗi tải dữ liệu.</div>;
+  // if (!data) return <div>Đang tải...</div>;
 
   return (
     <div className="overflow-hidden rounded-[0.5rem] border bg-background shadow">
@@ -79,7 +123,7 @@ const LoginPage = () => {
               </p>
             </div>
             <div className="grid gap-6">
-              <form>
+              
                 <div className="grid gap-2">
                   <div className="grid gap-1">
                     <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 sr-only">
@@ -92,6 +136,8 @@ const LoginPage = () => {
                       autoComplete="email"
                       autoCorrect="off"
                       type="email"
+                      value={email}
+                      onChange={handleOnChangeEmail}
                     />
                     <input
                       className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
@@ -100,6 +146,8 @@ const LoginPage = () => {
                       autoComplete="password"
                       autoCorrect="off"
                       type="password"
+                      value={password}
+                      onChange={handleOnChangePassword}
                     />
                   </div>
                   <Button
@@ -109,7 +157,7 @@ const LoginPage = () => {
                     Sign In with Email
                   </Button>
                 </div>
-              </form>
+              
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t"></span>
@@ -158,3 +206,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
