@@ -1,15 +1,17 @@
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { TASK_STATUS } from "@/plugins/dashboard/tasks/page";
-import { EllipsisVertical } from "lucide-react";
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import TaskDeleteDialog from "@/plugins/dashboard/tasks/components/dialog-delete";
+import { modalDeleteState } from "@/plugins/dashboard/tasks/taskstore";
+import { TASK_STATUS } from "@/types/task-enum";
+import { EllipsisVertical, FileIcon, Trash2Icon } from "lucide-react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +20,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { deleteTask } from "@/plugins/dashboard/tasks/api";
 
 interface ITask {
   id: number;
@@ -27,18 +28,28 @@ interface ITask {
   status: TASK_STATUS;
 }
 
-
 const CardTask = (props: ITask) => {
+  // recoil
+  const setModalDelete = useSetRecoilState(modalDeleteState);
+  const modalDelete = useRecoilValue(modalDeleteState);
 
-  const handleDeleteTask = () => {
-    deleteTask(props.id);
-  }
+  const handleOpenModalDelete = () => {
+    setModalDelete(true);
+  };
+
+  const handleMoveToTrash = () => {
+    setModalDelete(true);
+  };
+
+  const handleEditTask = () => {
+    setModalDelete(true);
+  };
 
   return (
     <>
-      <Card>
+      <Card className="min-h-[230px] rounded-2xl">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium line-clamp-1">
+          <CardTitle className="text-lg font-medium line-clamp-1">
             {props.title}
           </CardTitle>
           <DropdownMenu>
@@ -48,43 +59,43 @@ const CardTask = (props: ITask) => {
             <DropdownMenuContent>
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Update Task</DropdownMenuItem>
-              <DropdownMenuItem>Move to trash</DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDeleteTask}>Delete Task</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleEditTask}>
+                Update Task
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleMoveToTrash}>
+                Move to trash
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleOpenModalDelete}>
+                Delete Task
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </CardHeader>
         <CardContent className="flex flex-col justify-start items-start gap-3">
-          <div className="text-md font-bold line-clamp-3">{props.content}</div>
-          <div className="flex flex-col items-start w-full">
-            <div>
-              456
-            </div>
-            <div className="flex items-end justify-between w-full">
-              <Badge variant="default" className="self-end mt-5">
-                {props.status}
-              </Badge>
-              <div>
-                edit
-              </div>
-            </div>
-
+          <div className="text-sm text-neutral-200 line-clamp-3 mb-auto">
+            {props.content}
           </div>
         </CardContent>
+        <CardFooter>
+          <div className="flex flex-col items-start w-full mt-auto">
+            <div>456</div>
+            <div className="flex items-end justify-between w-full">
+              <Badge variant="default" className={cn("self-end mt-5")}>
+                {props.status}
+              </Badge>
+              <div className="flex gap-3">
+                <FileIcon className="cursor-pointer" />
+                <Trash2Icon
+                  className="cursor-pointer"
+                  onClick={handleOpenModalDelete}
+                />
+              </div>
+            </div>
+          </div>
+        </CardFooter>
       </Card>
 
-      <Dialog>
-        {/* <DialogTrigger>Open</DialogTrigger> */}
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+      {modalDelete && <TaskDeleteDialog />}
     </>
   );
 };

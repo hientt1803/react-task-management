@@ -1,6 +1,4 @@
-import {
-    Dialog
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
 import React from "react";
 
 const MainDialog = ({

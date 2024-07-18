@@ -1,14 +1,8 @@
-// viết hàm get todo
-
 import { authStore } from "@/stores/auth";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { getRecoil, setRecoil } from "recoil-nexus";
 import { listTaskState } from "./taskstore";
-import { Interface } from "readline";
-import { toast } from "react-toastify";
-
-// Java: utils => method => lưu cookies
-// react: function => call api => lưu vào recoil
 
 interface ITask {
   title: string;
@@ -52,9 +46,4 @@ function deleteTask(taskId: number) {
       }
     });
 }
-export { getListTask, createTask, deleteTask };
-
-// axios
-//   .get(`http://localhost:8080/todos/user/${profileUser?.id}`)
-//   .then((response) => {})
-//   .catch((error) => console.error("Error fetching data: ", error));
+export { createTask, deleteTask, getListTask };

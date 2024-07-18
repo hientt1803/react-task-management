@@ -3,68 +3,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { authStore } from "@/stores/auth";
-import { useRecoilValue } from "recoil";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { createTask, getListTask } from "./api";
-import { listTaskState } from "./taskstore";
-import { toast } from "react-toastify";
-
-// eslint-disable-next-line react-refresh/only-export-components
-export enum TASK_STATUS {
-  "IN_PROGRESS" = "In-progress",
-  "COMPLETED" = "Completed",
-  "DELETED" = "Deleted",
-}
-
-interface Task {
-  id: number;
-  title: string;
-  content: string;
-  status: TASK_STATUS;
-}
+import { useRecoilValue } from "recoil";
+import { createTask, getListTask } from "../api";
+import { listTaskState } from "../taskstore";
 
 export default function TaskPage() {
+  // recoil
+  const listTask = useRecoilValue(listTaskState);
+
+  // state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const listTask = useRecoilValue(listTaskState);
-  const profileUser = useRecoilValue(authStore);
-
-  // const createTask = async () => {
-  //   const taskData = {
-  //     title: title,
-  //     content: description,
-  //   };
-
-  //   try {
-  //     const response = await axios.post(
-  //       `http://localhost:8080/todos/user/${profileUser?.id}`,
-  //       taskData
-  //     );
-  //     console.log("Task created:", response.data);
-  //   } catch (error) {
-  //     console.error("Error creating task:", error);
-  //   }
-  // };
 
   useEffect(() => {
     getListTask();
   }, []);
 
-
   const hanldleCreateTask = async () => {
     const taskData = {
       title: title,
       content: description,
-    }
+    };
 
     createTask(taskData);
   };
 
-
-
-  console.log(profileUser);
   return (
     <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
       <div className="mb-5 w-full">
@@ -101,9 +65,9 @@ export default function TaskPage() {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   className="mr-2 h-6 w-6"
                 >
                   <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"></path>

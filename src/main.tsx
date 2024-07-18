@@ -1,19 +1,25 @@
 import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import React from "react";
+
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import App from "./App.tsx";
-import { ThemeProvider } from "./components/providers/theme-provider.tsx";
-import MainLayout from "./layouts/main-layout.tsx";
-import LoginPage from "./plugins/auth/login.tsx";
-import DashboardPage from "./plugins/dashboard/dashboard/page.tsx";
-import TaskPage from "./plugins/dashboard/tasks/page.tsx";
+
 import { RecoilRoot } from "recoil";
 import RecoilNexus from "recoil-nexus";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { ThemeProvider } from "./components/providers/theme-provider.tsx";
+
+import App from "./App.tsx";
+import MainLayout from "./layouts/main-layout.tsx";
+import LoginPage from "./plugins/auth/login.tsx";
+import DashboardPage from "./plugins/dashboard/dashboard/page.tsx";
+import TaskPage from "./plugins/dashboard/tasks/components/page.tsx";
+import CompletedPageContainer from "./plugins/dashboard/completed/components/index.tsx";
+import TrashPageContainer from "./plugins/dashboard/trash/components/index.tsx";
+
 
 const router = createBrowserRouter([
   {
@@ -38,11 +44,11 @@ const router = createBrowserRouter([
       },
       {
         path: "completed-task",
-        element: <div>TASK HAVE BEEN DONE HERE</div>,
+        element: <CompletedPageContainer />
       },
       {
         path: "trash-task",
-        element: <div>TASK DELETE HERE</div>,
+        element: <TrashPageContainer />,
       },
     ],
   },

@@ -26,13 +26,13 @@ export function MainNav({
         to="/dashboard/completed-task"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Tasks Completed
+        Completed
       </Link>
       <Link
         to="/dashboard/trash-task"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Trash task
+        Trash
       </Link>
     </nav>
   );
