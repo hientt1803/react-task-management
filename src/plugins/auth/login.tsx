@@ -5,17 +5,18 @@ import axios from "axios";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import { loginApi } from "./api";
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const [user, setUser] = useRecoilState(authStore);
 
   const handleOnChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+    setUsername(e.target.value);
   }
 
   const handleOnChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,22 +30,13 @@ const LoginPage = () => {
   // localStorage.setItem("token", ")
   // localStorage.getItem("token");
   // sessionStorage.getItem("token");
+  const formData = {
+    username, 
+    password 
+  }
 
   const handleSubmitForm = async () => {
-    await axios
-    .post(`${API_URL}users/login`, { email, password })
-    .then((res) => {
-      const response = res.data;
-      setUser(response);
-      console.log(response);
-      console.log(res.status);
-      if (res.status === 200) {
-        navigate("/dashboard");
-      }
-    }).catch((error) => {
-      console.log(error);
-      
-    });
+    loginApi(formData);
   };
 
   // const { data, error } = useSWR<IPosts[]>(`${API_URL}/posts`, fetcher);
@@ -135,8 +127,8 @@ const LoginPage = () => {
                       placeholder="name@example.com"
                       autoComplete="email"
                       autoCorrect="off"
-                      type="email"
-                      value={email}
+                      type="username"
+                      value={username}
                       onChange={handleOnChangeEmail}
                     />
                     <input

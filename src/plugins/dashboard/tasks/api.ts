@@ -3,18 +3,24 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getRecoil, setRecoil } from "recoil-nexus";
 import { listTaskState } from "./taskstore";
+import { API_URL } from "@/utils";
 
 interface ITask {
   title: string;
-  content: string;
+  description: string;
 }
 
 function getListTask() {
   const profileUser = getRecoil(authStore);
   axios
-    .get(`http://localhost:8080/todos/user/${profileUser?.id}`)
+    .get(`${API_URL}api/users/2/todos`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
     .then((response) => {
-      setRecoil(listTaskState, response.data);
+      console.log(response.data.result);
+      setRecoil(listTaskState, response.data.result);
     })
     .catch((error) => console.error("Error fetching data: ", error));
 }
@@ -22,7 +28,7 @@ function getListTask() {
 function createTask(task: ITask) {
   const profileUser = getRecoil(authStore);
   axios
-    .post(`http://localhost:8080/todos/user/${profileUser?.id}`, task)
+    .post(`${API_URL}todos/user/${profileUser?.id}`, task)
     .then((response) => {
       if (response.status === 201) {
         toast.success("Task created successfully");
@@ -36,7 +42,7 @@ function createTask(task: ITask) {
 function deleteTask(taskId: number) {
   const profileUser = getRecoil(authStore);
   axios
-    .delete(`http://localhost:8080/todos/user/${profileUser?.id}/${taskId}`)
+    .delete(`${API_URL}todos/user/${profileUser?.id}/${taskId}`)
     .then((response) => {
       if (response.status === 204) {
         toast.success("Task deleted successfully");

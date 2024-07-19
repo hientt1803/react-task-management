@@ -22,8 +22,8 @@ export default function TaskPage() {
 
   const hanldleCreateTask = async () => {
     const taskData = {
-      title: title,
-      content: description,
+      title,
+      description,
     };
 
     createTask(taskData);
@@ -93,8 +93,9 @@ export default function TaskPage() {
             key={task.id}
             id={task.id}
             title={task.title}
-            content={task.content}
+            description={task.description}
             status={task.status}
+            createdAt={task.createdAt}
           />
         ))}
       </div>

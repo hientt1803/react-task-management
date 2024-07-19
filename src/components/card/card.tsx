@@ -21,11 +21,14 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
+import Moment from "moment";
+
 interface ITask {
   id: number;
   title: string;
-  content: string;
+  description: string;
   status: TASK_STATUS;
+  createdAt: string;
 }
 
 const CardTask = (props: ITask) => {
@@ -73,12 +76,12 @@ const CardTask = (props: ITask) => {
         </CardHeader>
         <CardContent className="flex flex-col justify-start items-start gap-3">
           <div className="text-sm text-neutral-200 line-clamp-3 mb-auto">
-            {props.content}
+            {props.description}
           </div>
         </CardContent>
         <CardFooter>
           <div className="flex flex-col items-start w-full mt-auto">
-            <div>456</div>
+            <div>{Moment(props.createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a')} </div>
             <div className="flex items-end justify-between w-full">
               <Badge variant="default" className={cn("self-end mt-5")}>
                 {props.status}

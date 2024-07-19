@@ -6,7 +6,7 @@ export interface ITask {
   createdAt: string;
   updatedAt: string;
   title: string;
-  content: string;
+  description: string;
   status: TASK_STATUS;
 }
 
