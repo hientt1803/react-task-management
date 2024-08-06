@@ -1,10 +1,16 @@
 import CardTask from "@/components/card/card";
 import { useRecoilValue } from "recoil";
-import { listTaskState } from "../../tasks/taskstore";
+import { listTaskTrashState } from "../../tasks/taskstore";
+import { useEffect } from "react";
+import { getListTaskTrash } from "../../tasks/api";
 
 const TrashPageContainer = () => {
   // recoil
-  const listTask = useRecoilValue(listTaskState);
+  const listTask = useRecoilValue(listTaskTrashState);
+
+  useEffect(() => {
+    getListTaskTrash();
+  }, []);
 
   return (
     <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
@@ -14,8 +20,10 @@ const TrashPageContainer = () => {
             key={task.id}
             id={task.id}
             title={task.title}
-            content={task.content}
+            description={task.description}
             status={task.status}
+            createdAt={task.createdAt}
+            updatedAt={task.updatedAt}
           />
         ))}
       </div>

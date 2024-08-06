@@ -8,18 +8,22 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { modalDeleteState } from "../taskstore";
+import { modalDeleteState, taskActiveState } from "../taskstore";
+import { deleteTask } from "../api";
 
 const TaskDeleteDialog = () => {
   const modalDelete = useRecoilValue(modalDeleteState);
   const setModalDelete = useSetRecoilState(modalDeleteState);
+  const getTaskActive = useRecoilValue(taskActiveState);
 
   const handleCloseModalDelete = () => {
     setModalDelete(false);
   };
 
   const handleDeleteTask = () => {
-    // deleteTask(props.id);
+    if (getTaskActive) {
+      deleteTask(getTaskActive?.id);
+    }
     setModalDelete(false);
   };
 

@@ -7,7 +7,7 @@ const accessToken = localStorage.getItem("token");
 
 /* Creating a new axios client with the baseURL, headers, and paramsSerializer. */
 export const axiosClient = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: "http://localhost:8080/api",
   headers: {
     "Content-Type": "application/json",
     Authorization: "Bearer " + accessToken,
@@ -18,7 +18,7 @@ export const axiosClient = axios.create({
 axiosClient.interceptors.response.use(
   (response) => {
     if (response && response.data) {
-      return response.data;
+      return response;
     }
     return response;
   },

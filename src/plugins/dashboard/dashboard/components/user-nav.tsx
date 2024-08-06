@@ -11,12 +11,14 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { logoutApi } from "@/plugins/auth/api";
 import { useNavigate } from "react-router-dom";
 
 export function UserNav() {
   const router = useNavigate();
   
   const logOutHandler = () => {
+    logoutApi();
     router("/auth/login");
   }
 

@@ -1,5 +1,5 @@
 export enum TASK_STATUS {
-  "IN_PROGRESS" = "In-progress",
-  "COMPLETED" = "Completed",
-  "TRASH" = "Trash",
+    'IN_PROGRESS' = 'IN_PROGRESS',
+    'COMPLETED' = 'COMPLETED',
+    'TRASH' = 'TRASH',
 }
