@@ -14,7 +14,7 @@ import {
     taskActiveState,
 } from '@/plugins/dashboard/tasks/taskstore';
 import { EllipsisVertical, FileIcon, Pencil, Trash2Icon } from 'lucide-react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -23,16 +23,24 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 import Moment from 'moment';
 import { updateTaskStatus } from '@/plugins/dashboard/tasks/api';
 
 const CardTask = (props: ITask) => {
     // recoil
+    
     const setModalDelete = useSetRecoilState(modalDeleteState);
     const modalDelete = useRecoilValue(modalDeleteState);
-    const setTaskActive = useSetRecoilState(taskActiveState);
-
+    const [activeTask, setTaskActive] = useRecoilState(taskActiveState);
+    
     const handleOpenModalDelete = () => {
         setModalDelete(true);
         setTaskActive(props);
@@ -90,15 +98,35 @@ const CardTask = (props: ITask) => {
                                   )}
                         </div>
                         <div className="flex items-end justify-between w-full">
-                            <Badge
-                                variant="default"
-                                className={cn('self-end mt-5')}
-                                onClick={() =>
-                                    updateTaskStatus(props.id, 'COMPLETED')
-                                }
-                            >
-                                {props.status}
-                            </Badge>
+                            {activeTask ? (
+                                <Select>
+                                    <SelectTrigger className="w-[180px]">
+                                        <SelectValue placeholder="Theme" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="IN_PROGRESS">
+                                            In Progress
+                                        </SelectItem>
+                                        <SelectItem value="COMPLETED">
+                                            Completed
+                                        </SelectItem>
+                                        <SelectItem value="TRASH">
+                                            Trash
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            ) : (
+                                <Badge
+                                    variant="default"
+                                    className={cn('self-end mt-5')}
+                                    onClick={() =>
+                                        updateTaskStatus(props.id, 'COMPLETED')
+                                    }
+                                >
+                                    {props.status}
+                                </Badge>
+                            )}
+
                             <div className="flex gap-3">
                                 <Pencil
                                     className="cursor-pointer"
