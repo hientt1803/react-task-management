@@ -1,28 +1,38 @@
 import { Button } from '@/components/ui/button';
-import { ChangeEvent, useEffect, useState } from 'react';
 import { loginApi } from './api';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+interface IFormData {
+    username: string;
+    password: string;
+}
+
+const schema = yup.object().shape({
+    username: yup
+        .string()
+        .required('Username is required')
+        .min(3, 'Username must be at least 3 characters long'),
+    password: yup
+        .string()
+        .required('Password is required')
+        .min(6, 'Password must be at least 6 characters long'),
+});
+
+const {
+    register,
+    handleSubmit,
+    formState: { errors },
+} = useForm<IFormData>({
+    resolver: yupResolver(schema),
+});
+
+const onSubmit = (data: IFormData) => {
+    loginApi(data);
+};
 
 const LoginPage = () => {
-    const [username, setUsername] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-
-    const handleOnChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-        setUsername(e.target.value);
-    };
-
-    const handleOnChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value);
-    };
-
-    useEffect(() => {
-        username.includes('@') ? setEmail(username) : setUsername(username);
-    }, [username]);
-
-    const handleSubmitForm = async () => {
-        loginApi(email ? { email, password } : { username, password });
-    };
-
     return (
         <div className="overflow-hidden rounded-[0.5rem] border bg-background shadow">
             <div className="md:hidden">
@@ -100,33 +110,46 @@ const LoginPage = () => {
                                     <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 sr-only">
                                         Email
                                     </label>
-                                    <input
-                                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                                        id="email"
-                                        placeholder="name@example.com"
-                                        autoComplete="email"
-                                        autoCorrect="off"
-                                        type="username"
-                                        value={username}
-                                        onChange={handleOnChangeEmail}
-                                    />
-                                    <input
-                                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                                        id="password"
-                                        placeholder="password"
-                                        autoComplete="password"
-                                        autoCorrect="off"
-                                        type="password"
-                                        value={password}
-                                        onChange={handleOnChangePassword}
-                                    />
+                                    <form onSubmit={handleSubmit(onSubmit)}>
+                                        <div>
+                                            <input
+                                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                                                id="email"
+                                                placeholder="name@example.com"
+                                                autoComplete="email"
+                                                autoCorrect="off"
+                                                type="username"
+                                                {...register('username')}
+                                            />
+                                            {errors.username && (
+                                                <p style={{ color: 'red' }}>
+                                                    {errors.username.message}
+                                                </p>
+                                            )}
+                                            <input
+                                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                                                id="password"
+                                                placeholder="password"
+                                                autoComplete="password"
+                                                autoCorrect="off"
+                                                type="password"
+                                                {...register('password')}
+                                            />
+                                            {errors.password && (
+                                                <p style={{ color: 'red' }}>
+                                                    {errors.password.message}
+                                                </p>
+                                            )}
+
+                                            <Button
+                                                type="submit"
+                                                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
+                                            >
+                                                Sign In with Email
+                                            </Button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <Button
-                                    onClick={() => handleSubmitForm()}
-                                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
-                                >
-                                    Sign In with Email
-                                </Button>
                             </div>
 
                             <div className="relative">

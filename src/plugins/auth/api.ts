@@ -3,16 +3,18 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { setRecoil } from 'recoil-nexus';
 
-interface IAuth {
-    username: string;
-    password: string;
-}
-
 const loginApi = async (auth: any) => {
-    console.log(auth);
+    let formData = {};
+
+    const isEmail = auth.username.includes('@');
+    if (isEmail) {
+        formData = { email: auth.username, password: auth.password };
+    } else {
+        formData = { username: auth.username, password: auth.password };
+    }
 
     await axios
-        .post(`http://localhost:8080/api/auth/token`, auth)
+        .post(`http://localhost:8080/api/auth/token`, formData)
         .then((res) => {
             const response = res.data;
             console.log(response.result.user);

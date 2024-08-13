@@ -8,7 +8,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { createTask, getListTask, updateTask } from '../api';
 import { ITask, listTaskState, taskActiveState } from '../taskstore';
 import { Undo2 } from 'lucide-react';
-import { TASK_STATUS } from '@/types/task-enum';
 
 export default function TaskPage() {
     // recoil

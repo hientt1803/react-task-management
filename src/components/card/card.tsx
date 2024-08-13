@@ -13,7 +13,7 @@ import {
     modalDeleteState,
     taskActiveState,
 } from '@/plugins/dashboard/tasks/taskstore';
-import { EllipsisVertical, FileIcon, Pencil, Trash2Icon } from 'lucide-react';
+import { EllipsisVertical, Pencil, Trash2Icon } from 'lucide-react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
     DropdownMenu,
