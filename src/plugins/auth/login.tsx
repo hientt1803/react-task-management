@@ -20,19 +20,19 @@ const schema = yup.object().shape({
         .min(6, 'Password must be at least 6 characters long'),
 });
 
-const {
-    register,
-    handleSubmit,
-    formState: { errors },
-} = useForm<IFormData>({
-    resolver: yupResolver(schema),
-});
-
-const onSubmit = (data: IFormData) => {
-    loginApi(data);
-};
-
 const LoginPage = () => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<IFormData>({
+        resolver: yupResolver(schema),
+    });
+
+    const onSubmit = (data: IFormData) => {
+        loginApi(data);
+    };
+
     return (
         <div className="overflow-hidden rounded-[0.5rem] border bg-background shadow">
             <div className="md:hidden">

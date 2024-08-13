@@ -14,9 +14,8 @@ import {
     taskActiveState,
 } from '@/plugins/dashboard/tasks/taskstore';
 import { EllipsisVertical, Pencil, Trash2Icon } from 'lucide-react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { EllipsisVertical, FileIcon, Pencil, Trash2Icon } from 'lucide-react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -38,11 +37,11 @@ import { updateTaskStatus } from '@/plugins/dashboard/tasks/api';
 
 const CardTask = (props: ITask) => {
     // recoil
-    
+
     const setModalDelete = useSetRecoilState(modalDeleteState);
     const modalDelete = useRecoilValue(modalDeleteState);
     const [activeTask, setTaskActive] = useRecoilState(taskActiveState);
-    
+
     const handleOpenModalDelete = () => {
         setModalDelete(true);
         setTaskActive(props);
